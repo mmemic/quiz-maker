@@ -17,7 +17,31 @@ const config: Config = {
   },
   plugins: [require('daisyui')],
   daisyui: {
-    themes: ['light', 'dark', 'cupcake'],
+    themes: [
+      'light',
+      'dark',
+      {
+        enterwell: {
+          primary: '#264653',
+
+          secondary: '#2A9D8F',
+
+          accent: '#b4e9d6',
+
+          neutral: '#70acc7',
+
+          'base-100': '#ffffff',
+
+          info: '#3abff8',
+
+          success: '#36d399',
+
+          warning: '#fbbd23',
+
+          error: '#f87272',
+        },
+      },
+    ],
   },
 };
 export default config;
