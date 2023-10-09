@@ -16,9 +16,7 @@ class ApiService {
   async post(url: string, data: unknown) {
     const response = await fetch(`${this.baseUrl}${url}`, {
       method: 'POST',
-      body: JSON.stringify({
-        data,
-      }),
+      body: JSON.stringify(data),
       headers: {
         'content-type': 'application/json',
       },

@@ -7,7 +7,8 @@ import AddNewQuestion from '../question/add-new-question';
 import { UseExistingQuestions } from '../question/use-existing-questions';
 import Button from '../button';
 import clsx from 'clsx';
-import { Question } from '@prisma/client';
+import { quizService } from '@/services/quiz.service';
+import { useRouter } from 'next/navigation';
 
 enum QuestionActionEnum {
   ADD_NEW = 'add-new',
@@ -18,6 +19,7 @@ export default function QuizForm() {
   const defaultQuizName = 'Untitled quiz';
   const [name, setName] = useState<string>(defaultQuizName);
   const [questions, setQuestions] = useState<CreateQuestion[]>([]);
+  const router = useRouter();
 
   const [questionAction, setQuestionAction] =
     useState<QuestionActionEnum | null>(null);
@@ -55,13 +57,22 @@ export default function QuizForm() {
     setQuestions([]);
   };
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
     const quiz = {
       name,
-      questions,
+      questions: questions.map(({ question, answer }) => ({
+        question,
+        answer,
+      })),
     };
 
-    console.log('🚀 ~ file: quiz-form.tsx:62 ~ quiz:', quiz);
+    console.log('🚀 ~ file: quiz-form.tsx:66 ~ quiz:', quiz);
+
+    const res = await quizService.createQuiz(quiz);
+
+    console.log('🚀 ~ file: quiz-form.tsx:73 ~ res:', res);
+
+    router.push('/');
   };
 
   const handleRemoveItem = (internalId: string) => {

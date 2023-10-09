@@ -7,7 +7,7 @@ export type CreateQuestion = Pick<Question, 'question' | 'answer'> & {
 
 export type CreateQuiz = {
   name: string;
-  questions: CreateQuestion[];
+  questions: Pick<Question, 'question' | 'answer'>[];
 };
 
 export type QuizResponse = Omit<Quiz, 'created_at' | 'updated_at'> & {
