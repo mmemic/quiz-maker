@@ -26,7 +26,7 @@ const config: Config = {
 
           secondary: '#2A9D8F',
 
-          accent: '#b4e9d6',
+          accent: '#F4A261',
 
           neutral: '#70acc7',
 

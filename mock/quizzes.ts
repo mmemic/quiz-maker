@@ -1,6 +1,4 @@
-import { Quiz } from '@/components/types';
-
-export const mockQuizzes: Quiz[] = [
+export const mockQuizzes = [
   {
     id: 1,
     name: 'Enterwell Quiz 1',

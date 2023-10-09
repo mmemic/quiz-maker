@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Button from './button';
-import { Quiz } from './types';
+import { Quiz } from '../types';
 import trashIcon from '../assets/trash.svg';
 import eyeIcon from '../assets/eye.svg';
 
