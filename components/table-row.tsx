@@ -1,11 +1,8 @@
-import Image from 'next/image';
 import Button from './button';
-import { Quiz } from '../types';
-import trashIcon from '../assets/trash.svg';
-import eyeIcon from '../assets/eye.svg';
+import { QuizResponse } from '@/types';
 
 export type TableRowProps = {
-  data: Quiz;
+  data: QuizResponse;
 };
 
 export default function TableRow({ data }: TableRowProps) {

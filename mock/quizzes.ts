@@ -1,4 +1,6 @@
-export const mockQuizzes = [
+import { QuizResponse } from '@/types';
+
+export const mockQuizzes: QuizResponse[] = [
   {
     id: 1,
     name: 'Enterwell Quiz 1',

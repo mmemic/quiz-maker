@@ -1,8 +1,8 @@
 import TableRow from './table-row';
-import { Quiz } from '../types';
+import { QuizResponse } from '@/types';
 
 export type TableProps = {
-  data: Quiz[];
+  data: QuizResponse[];
 };
 
 export default function Table({ data }: TableProps) {
