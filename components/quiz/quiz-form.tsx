@@ -60,18 +60,14 @@ export default function QuizForm() {
   const handleCreate = async () => {
     const quiz = {
       name,
-      questions: questions.map(({ question, answer }) => ({
+      questions: questions.map(({ question, answer, id }) => ({
         question,
         answer,
+        id,
       })),
     };
 
-    console.log('🚀 ~ file: quiz-form.tsx:66 ~ quiz:', quiz);
-
-    const res = await quizService.createQuiz(quiz);
-
-    console.log('🚀 ~ file: quiz-form.tsx:73 ~ res:', res);
-
+    await quizService.createQuiz(quiz);
     router.push('/');
   };
 

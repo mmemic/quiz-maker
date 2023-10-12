@@ -2,6 +2,7 @@ import { prisma } from '@/prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { QuizSchema } from '../schemas';
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from '../const';
+import { Question } from '@prisma/client';
 
 export async function GET(request: NextRequest) {
   const pageParam = request.nextUrl.searchParams.get('page');
@@ -40,11 +41,21 @@ export async function POST(request: NextRequest) {
   }
 
   const { data } = response;
+  type NewQuestion = Pick<Question, 'question' | 'answer'>;
+  type ExistingQuestion = NewQuestion & { id: number };
+  const newQuestions: NewQuestion[] = [];
+  const existingQuestions: ExistingQuestion[] = [];
+
+  for (const q of data.questions) {
+    q.id ? existingQuestions.push(q as ExistingQuestion) : newQuestions.push(q);
+  }
+
   const quiz = await prisma.quiz.create({
     data: {
       name: data.name,
       questions: {
-        create: data.questions,
+        connect: existingQuestions,
+        create: newQuestions,
       },
     },
     include: { questions: true },
