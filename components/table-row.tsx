@@ -1,5 +1,7 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Button from './button';
 import { QuizResponse } from '@/types';
+import { faPlay, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export type TableRowProps = {
   data: QuizResponse;
@@ -11,13 +13,9 @@ export default function TableRow({ data }: TableRowProps) {
     <tr className='hover hover:cursor-pointer group'>
       <th>{id}</th>
       <td>{name}</td>
-      <td className='flex gap-4'>
-        <Button className='btn-sm btn-outline btn-error invisible group-hover:visible'>
-          delete
-        </Button>
-        <Button className='btn-sm btn-outline btn-info invisible group-hover:visible'>
-          view
-        </Button>
+      <td className='gap-4 flex'>
+        <FontAwesomeIcon icon={faTrash} className='text-primary md:text-lg' />
+        <FontAwesomeIcon icon={faPlay} className='text-secondary md:text-lg' />
       </td>
     </tr>
   );

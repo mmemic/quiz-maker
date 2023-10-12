@@ -16,15 +16,22 @@ export default function QuizList({
 }: QuizListProps) {
   const [data, setData] = useState<QuizResponse[]>(initialData);
   const [meta, setMeta] = useState<ResponseMeta>(initialMeta);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const { page, pageCount } = meta;
   const hasPrevious: boolean = page > 1;
   const hasNext: boolean = pageCount > page;
 
-  const fetchQuizzes = (page: number) =>
-    quizService.getQuizzes(page).then((res) => {
-      setData(res.data);
-      setMeta(res.meta);
-    });
+  const fetchQuizzes = (page: number) => {
+    setIsLoading(true);
+    quizService
+      .getQuizzes(page)
+      .then((res) => {
+        setData(res.data);
+        setMeta(res.meta);
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   const handlePrevious = () => {
     if (hasPrevious) {
@@ -39,8 +46,11 @@ export default function QuizList({
   };
 
   return (
-    <div className='w-full flex flex-col items-center'>
+    <div className='w-full flex flex-col items-center gap-4'>
       <Table data={data} />
+      {isLoading && (
+        <span className='loading loading-spinner loading-md'></span>
+      )}
       <div className='join grid grid-cols-2'>
         <button
           className={clsx('join-item btn btn-outline', {
