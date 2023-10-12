@@ -20,7 +20,7 @@ export default function QuestionListItem({
         <summary className='collapse-title text-md font-medium'>{name}</summary>
         <div className='collapse-content'>{answer}</div>
       </details>
-      <div className='md:pl-4 md:absolute md:-right-16 md:inset-y-0 hidden hover:flex peer-hover:flex'>
+      <div className='md:pl-4 md:absolute md:-right-16 md:inset-y-0 md:hidden hover:flex peer-hover:flex'>
         <button className='btn btn-circle hover:bg-error' onClick={handleClick}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
