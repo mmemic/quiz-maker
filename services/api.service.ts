@@ -25,6 +25,14 @@ class ApiService {
     });
     return response.json();
   }
+
+  async delete(url: string) {
+    const response = await fetch(`${this.baseUrl}${url}`, {
+      method: 'DELETE',
+      cache: 'no-store',
+    });
+    return response.json();
+  }
 }
 
 export const apiService = new ApiService();

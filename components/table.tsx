@@ -3,9 +3,10 @@ import { QuizResponse } from '@/types';
 
 export type TableProps = {
   data: QuizResponse[];
+  handleDelete: (val: number) => void;
 };
 
-export default function Table({ data }: TableProps) {
+export default function Table({ data, handleDelete }: TableProps) {
   return (
     <div className='w-full max-w-3xl'>
       <table className='table'>
@@ -17,7 +18,7 @@ export default function Table({ data }: TableProps) {
         </thead>
         <tbody>
           {data.map((row) => (
-            <TableRow key={row.id} data={row} />
+            <TableRow key={row.id} data={row} handleDelete={handleDelete} />
           ))}
         </tbody>
       </table>

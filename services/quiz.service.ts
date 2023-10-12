@@ -10,6 +10,10 @@ class QuizService {
   async getQuizzes(page = 1, limit = 10) {
     return await apiService.get(`/quizzes?page=${page}&limit=${limit}`);
   }
+
+  async deleteQuiz(id: number) {
+    return await apiService.delete(`/quizzes/${id}`);
+  }
 }
 
 export const quizService = new QuizService();

@@ -45,9 +45,13 @@ export default function QuizList({
     }
   };
 
+  const handleDelete = (id: number) => {
+    quizService.deleteQuiz(id).then(() => fetchQuizzes(page));
+  };
+
   return (
     <div className='w-full flex flex-col items-center gap-4'>
-      <Table data={data} />
+      <Table data={data} handleDelete={handleDelete} />
       {isLoading && (
         <span className='loading loading-spinner loading-md'></span>
       )}
