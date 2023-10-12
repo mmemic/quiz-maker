@@ -13,3 +13,10 @@ export type CreateQuiz = {
 export type QuizResponse = Omit<Quiz, 'created_at' | 'updated_at'> & {
   questions: Omit<Question, 'created_at' | 'updated_at' | 'quizId'>[];
 };
+
+export type ResponseMeta = {
+  page: number;
+  pageCount: number;
+  pageSize: number;
+  total: number;
+};

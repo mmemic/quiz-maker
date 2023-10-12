@@ -6,6 +6,10 @@ class QuizService {
   async createQuiz(data: CreateQuiz): Promise<Quiz> {
     return await apiService.post('/quizzes', data);
   }
+
+  async getQuizzes(page = 1, limit = 10) {
+    return await apiService.get(`/quizzes?page=${page}&limit=${limit}`);
+  }
 }
 
 export const quizService = new QuizService();

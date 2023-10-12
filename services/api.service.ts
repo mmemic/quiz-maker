@@ -9,7 +9,9 @@ class ApiService {
   }
 
   async get(url: string) {
-    const response = await fetch(`${this.baseUrl}${url}`);
+    const response = await fetch(`${this.baseUrl}${url}`, {
+      cache: 'no-store',
+    });
     return response.json();
   }
 
