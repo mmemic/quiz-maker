@@ -4,6 +4,9 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import LogoIcon from '../public/logo.svg';
 const inter = Inter({ subsets: ['latin'] });
+import { config } from '@fortawesome/fontawesome-svg-core';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+config.autoAddCss = false;
 
 export const metadata: Metadata = {
   title: 'Quiz Maker',
