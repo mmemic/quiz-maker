@@ -1,57 +1,14 @@
 'use client';
-import { quizService } from '@/services/quiz.service';
 import Table from '../table';
-import { QuizResponse, ResponseMeta } from '@/types';
-import { useState } from 'react';
 import clsx from 'clsx';
+import { useQuizContext } from '@/contexts/quiz.context';
 
-export type QuizListProps = {
-  data: QuizResponse[];
-  meta: ResponseMeta;
-};
-
-export default function QuizList({
-  data: initialData,
-  meta: initialMeta,
-}: QuizListProps) {
-  const [data, setData] = useState<QuizResponse[]>(initialData);
-  const [meta, setMeta] = useState<ResponseMeta>(initialMeta);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const { page, pageCount } = meta;
-  const hasPrevious: boolean = page > 1;
-  const hasNext: boolean = pageCount > page;
-
-  const fetchQuizzes = (page: number) => {
-    setIsLoading(true);
-    quizService
-      .getQuizzes(page)
-      .then((res) => {
-        setData(res.data);
-        setMeta(res.meta);
-      })
-      .finally(() => setIsLoading(false));
-  };
-
-  const handlePrevious = () => {
-    if (hasPrevious) {
-      fetchQuizzes(page - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (hasNext) {
-      fetchQuizzes(page + 1);
-    }
-  };
-
-  const handleDelete = (id: number) => {
-    quizService.deleteQuiz(id).then(() => fetchQuizzes(page));
-  };
-
+export default function QuizList() {
+  const { quizzes, isLoading, hasPrevious, hasNext, fetchPrevious, fetchNext } =
+    useQuizContext();
   return (
     <div className='w-full flex flex-col items-center gap-4'>
-      <Table data={data} handleDelete={handleDelete} />
+      <Table data={quizzes} />
       {isLoading && (
         <span className='loading loading-spinner loading-md'></span>
       )}
@@ -60,7 +17,7 @@ export default function QuizList({
           className={clsx('join-item btn btn-outline', {
             'btn-disabled': !hasPrevious,
           })}
-          onClick={handlePrevious}
+          onClick={fetchPrevious}
         >
           Previous page
         </button>
@@ -68,7 +25,7 @@ export default function QuizList({
           className={clsx('join-item btn btn-outline', {
             'btn-disabled': !hasNext,
           })}
-          onClick={handleNext}
+          onClick={fetchNext}
         >
           Next
         </button>

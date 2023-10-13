@@ -5,10 +5,9 @@ import DeleteModal from './modals/delete-modal';
 
 export type TableRowProps = {
   data: QuizResponse;
-  handleDelete: (val: number) => void;
 };
 
-export default function TableRow({ data, handleDelete }: TableRowProps) {
+export default function TableRow({ data }: TableRowProps) {
   const { id, name } = data;
   const modalId = `delete_modal_${id}`;
   return (
@@ -26,12 +25,7 @@ export default function TableRow({ data, handleDelete }: TableRowProps) {
         <FontAwesomeIcon icon={faPlay} className='text-secondary text-lg' />
       </td>
       <td>
-        <DeleteModal
-          id={id}
-          name={name}
-          modalId={modalId}
-          handleDelete={handleDelete}
-        />
+        <DeleteModal id={id} name={name} modalId={modalId} />
       </td>
     </tr>
   );

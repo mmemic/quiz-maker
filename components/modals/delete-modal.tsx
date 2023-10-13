@@ -1,20 +1,16 @@
+import { useQuizContext } from '@/contexts/quiz.context';
 import Button from '../button';
 
 export type DeleteModalProps = {
   id: number;
   name: string;
   modalId: string;
-  handleDelete: (val: number) => void;
 };
 
-export default function DeleteModal({
-  id,
-  name,
-  modalId,
-  handleDelete,
-}: DeleteModalProps) {
+export default function DeleteModal({ id, name, modalId }: DeleteModalProps) {
+  const { deleteQuiz } = useQuizContext();
   const handleClick = () => {
-    handleDelete(id);
+    deleteQuiz(id);
   };
   return (
     <dialog id={modalId} className='modal modal-bottom sm:modal-middle'>
