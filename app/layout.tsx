@@ -21,9 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' data-theme='enterwell'>
-      <body
-        className={`${inter.className} relative max-h-screen flex flex-col mb-10`}
-      >
+      <body className={`${inter.className} relative flex flex-col pb-10`}>
         <Navbar />
         {children}
       </body>
