@@ -8,6 +8,8 @@ import { UseExistingQuestions } from '../question/use-existing-questions';
 import Button from '../button';
 import clsx from 'clsx';
 import { useQuizContext } from '@/contexts/quiz.context';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 enum QuestionActionEnum {
   ADD_NEW = 'add-new',
@@ -18,6 +20,7 @@ export default function QuizForm() {
   const defaultQuizName = 'Untitled quiz';
   const [name, setName] = useState<string>(defaultQuizName);
   const [questions, setQuestions] = useState<CreateQuestion[]>([]);
+  const [showPen, setShowPen] = useState<boolean>(true);
   const { createQuiz, isSubmitting } = useQuizContext();
 
   const [questionAction, setQuestionAction] =
@@ -29,6 +32,7 @@ export default function QuizForm() {
 
   //prevent from setting empty name
   const handleBlur = () => {
+    setShowPen(true);
     if (!name.length) {
       setName(defaultQuizName);
     }
@@ -69,14 +73,21 @@ export default function QuizForm() {
   };
 
   return (
-    <div className='form-control w-full max-w-lg flex flex-col gap-4 items-center'>
-      <input
-        type='text'
-        className='input hover:border-primary text-center text-2xl font-semibold'
-        value={name}
-        onChange={handleInputChange}
-        onBlur={handleBlur}
-      />
+    <div className='form-control w-full max-w-lg flex flex-col gap-4 items-center m-4'>
+      <div className='flex items-center gap-2'>
+        <input
+          type='text'
+          className='input hover:border-primary text-center text-2xl font-semibold w-48'
+          value={name}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
+          onFocus={() => setShowPen(false)}
+        />
+        <FontAwesomeIcon
+          icon={faPen}
+          className={clsx({ invisible: !showPen })}
+        />
+      </div>
       <div className='join flex flex-col md:flex-row items-center gap-1 md:gap-0'>
         <input
           className='btn rounded-r-lg md:rounded-r-none'
