@@ -11,6 +11,7 @@ interface QuizContextProps {
   hasPrevious: boolean;
   hasNext: boolean;
   isLoading: boolean;
+  isSubmitting: boolean;
   fetchPrevious: () => void;
   fetchNext: () => void;
   refetch: () => void;
@@ -23,6 +24,7 @@ const QuizContext = createContext<QuizContextProps>({
   hasPrevious: false,
   hasNext: false,
   isLoading: false,
+  isSubmitting: false,
   fetchPrevious: () => {},
   fetchNext: () => {},
   refetch: () => {},
@@ -43,6 +45,7 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
     total: 0,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -81,11 +84,11 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
   };
 
   const createQuiz = (quiz: CreateQuiz) => {
-    setIsLoading(true);
+    setIsSubmitting(true);
     quizService
       .createQuiz(quiz)
       .then(() => router.push('/'))
-      .finally(() => setIsLoading(false));
+      .finally(() => setIsSubmitting(false));
   };
 
   const deleteQuiz = (id: number) => {
@@ -99,6 +102,7 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
         hasPrevious,
         hasNext,
         isLoading,
+        isSubmitting,
         fetchPrevious,
         fetchNext,
         refetch,

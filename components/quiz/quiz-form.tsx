@@ -18,7 +18,7 @@ export default function QuizForm() {
   const defaultQuizName = 'Untitled quiz';
   const [name, setName] = useState<string>(defaultQuizName);
   const [questions, setQuestions] = useState<CreateQuestion[]>([]);
-  const { createQuiz, isLoading } = useQuizContext();
+  const { createQuiz, isSubmitting } = useQuizContext();
 
   const [questionAction, setQuestionAction] =
     useState<QuestionActionEnum | null>(null);
@@ -105,7 +105,7 @@ export default function QuizForm() {
         resetAction={resetAction}
         handleRemoveItem={handleRemoveItem}
       />
-      {isLoading && (
+      {isSubmitting && (
         <span className='loading loading-spinner loading-md'></span>
       )}
       <div
