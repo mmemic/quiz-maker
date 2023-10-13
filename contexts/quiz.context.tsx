@@ -2,8 +2,9 @@
 import { createContext, useContext, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { QuizResponse, ResponseMeta } from '@/types';
+import { CreateQuiz, QuizResponse, ResponseMeta } from '@/types';
 import { quizService } from '@/services/quiz.service';
+import { useRouter } from 'next/navigation';
 
 interface QuizContextProps {
   quizzes: QuizResponse[];
@@ -13,6 +14,7 @@ interface QuizContextProps {
   fetchPrevious: () => void;
   fetchNext: () => void;
   refetch: () => void;
+  createQuiz: (val: CreateQuiz) => void;
   deleteQuiz: (val: number) => void;
 }
 
@@ -24,6 +26,7 @@ const QuizContext = createContext<QuizContextProps>({
   fetchPrevious: () => {},
   fetchNext: () => {},
   refetch: () => {},
+  createQuiz: () => {},
   deleteQuiz: () => {},
 });
 
@@ -40,6 +43,7 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
     total: 0,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     fetchQuizzes(page);
@@ -76,6 +80,14 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
     fetchQuizzes(page);
   };
 
+  const createQuiz = (quiz: CreateQuiz) => {
+    setIsLoading(true);
+    quizService
+      .createQuiz(quiz)
+      .then(() => router.push('/'))
+      .finally(() => setIsLoading(false));
+  };
+
   const deleteQuiz = (id: number) => {
     quizService.deleteQuiz(id).then(() => fetchQuizzes(page));
   };
@@ -90,6 +102,7 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
         fetchPrevious,
         fetchNext,
         refetch,
+        createQuiz,
         deleteQuiz,
       }}
     >

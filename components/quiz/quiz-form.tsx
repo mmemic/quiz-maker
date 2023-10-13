@@ -7,8 +7,7 @@ import AddNewQuestion from '../question/add-new-question';
 import { UseExistingQuestions } from '../question/use-existing-questions';
 import Button from '../button';
 import clsx from 'clsx';
-import { quizService } from '@/services/quiz.service';
-import { useRouter } from 'next/navigation';
+import { useQuizContext } from '@/contexts/quiz.context';
 
 enum QuestionActionEnum {
   ADD_NEW = 'add-new',
@@ -19,7 +18,7 @@ export default function QuizForm() {
   const defaultQuizName = 'Untitled quiz';
   const [name, setName] = useState<string>(defaultQuizName);
   const [questions, setQuestions] = useState<CreateQuestion[]>([]);
-  const router = useRouter();
+  const { createQuiz, isLoading } = useQuizContext();
 
   const [questionAction, setQuestionAction] =
     useState<QuestionActionEnum | null>(null);
@@ -35,12 +34,6 @@ export default function QuizForm() {
     }
   };
 
-  const handleCreateQuiz = () => {
-    //api call
-    //POST /quizzes
-    // const newQuiz: CreateQuiz = {name, questions}
-    // mockQuizzes.push()
-  };
   const handleAddQuestions = (questions: CreateQuestion[]) =>
     setQuestions((prev) => [...questions, ...prev]);
 
@@ -66,9 +59,7 @@ export default function QuizForm() {
         id,
       })),
     };
-
-    await quizService.createQuiz(quiz);
-    router.push('/');
+    createQuiz(quiz);
   };
 
   const handleRemoveItem = (internalId: string) => {
@@ -114,6 +105,9 @@ export default function QuizForm() {
         resetAction={resetAction}
         handleRemoveItem={handleRemoveItem}
       />
+      {isLoading && (
+        <span className='loading loading-spinner loading-md'></span>
+      )}
       <div
         className={clsx(
           {
