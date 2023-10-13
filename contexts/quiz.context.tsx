@@ -32,28 +32,25 @@ const QuizContext = createContext<QuizContextProps>({
   deleteQuiz: () => {},
 });
 
+type QuizData = {
+  data: QuizResponse[];
+  meta: ResponseMeta;
+};
+
 interface QuizProviderProps {
   children?: ReactNode | ReactNode[];
+  initialData: QuizData;
 }
 
-export const QuizProvider = ({ children }: QuizProviderProps) => {
-  const [quizzes, setQuizzes] = useState<QuizResponse[]>([]);
-  const [meta, setMeta] = useState<ResponseMeta>({
-    page: 1,
-    pageCount: 0,
-    pageSize: 10,
-    total: 0,
-  });
-
+export const QuizProvider = ({ children, initialData }: QuizProviderProps) => {
+  const [data, setData] = useState<QuizData>(initialData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
 
-  useEffect(() => {
-    fetchQuizzes(page);
-  }, []);
-
+  const { data: quizzes, meta } = data;
   const { page, pageCount, pageSize, total } = meta;
+
   const hasPrevious: boolean = page > 1;
   const hasNext: boolean = pageCount > page;
 
@@ -61,9 +58,8 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
     setIsLoading(true);
     quizService
       .getQuizzes(page)
-      .then((res) => {
-        setQuizzes(res.data);
-        setMeta(res.meta);
+      .then((data) => {
+        setData(data);
       })
       .finally(() => setIsLoading(false));
   };
