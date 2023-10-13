@@ -132,17 +132,22 @@ export const seedQuestions = [
 export const seedQuizzes = [
   {
     name: 'Enterwell Quiz 1',
+    slug: 'enterwell-quiz-1',
   },
   {
     name: 'Enterwell Quiz 2',
+    slug: 'enterwell-quiz-2',
   },
   {
     name: 'Enterwell Quiz 3',
+    slug: 'enterwell-quiz-3',
   },
   {
     name: 'Enterwell Quiz 4',
+    slug: 'enterwell-quiz-4',
   },
   {
     name: 'Enterwell Quiz 5',
+    slug: 'enterwell-quiz-5',
   },
 ];
