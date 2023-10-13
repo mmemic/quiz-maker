@@ -44,6 +44,7 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
     pageSize: 10,
     total: 0,
   });
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const router = useRouter();
@@ -52,7 +53,7 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
     fetchQuizzes(page);
   }, []);
 
-  const { page, pageCount } = meta;
+  const { page, pageCount, pageSize, total } = meta;
   const hasPrevious: boolean = page > 1;
   const hasNext: boolean = pageCount > page;
 
@@ -92,7 +93,12 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
   };
 
   const deleteQuiz = (id: number) => {
-    quizService.deleteQuiz(id).then(() => fetchQuizzes(page));
+    quizService.deleteQuiz(id).then(() => {
+      //case when deleting last quiz on current page
+      if (page != 1 && total === (page - 1) * pageSize + 1) {
+        fetchQuizzes(page - 1);
+      } else fetchQuizzes(page);
+    });
   };
 
   return (
