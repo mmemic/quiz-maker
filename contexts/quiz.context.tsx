@@ -1,21 +1,19 @@
 'use client';
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
-import { CreateQuiz, QuizResponse, ResponseMeta } from '@/types';
+import { ResponseMeta } from '@/types/meta.type';
 import { quizService } from '@/services/quiz.service';
-import { useRouter } from 'next/navigation';
+import { QuizResponse } from '@/types/quiz.type';
 
 interface QuizContextProps {
   quizzes: QuizResponse[];
   hasPrevious: boolean;
   hasNext: boolean;
   isLoading: boolean;
-  isSubmitting: boolean;
   fetchPrevious: () => void;
   fetchNext: () => void;
   refetch: () => void;
-  createQuiz: (val: CreateQuiz) => void;
   deleteQuiz: (val: number) => void;
 }
 
@@ -24,11 +22,9 @@ const QuizContext = createContext<QuizContextProps>({
   hasPrevious: false,
   hasNext: false,
   isLoading: false,
-  isSubmitting: false,
   fetchPrevious: () => {},
   fetchNext: () => {},
   refetch: () => {},
-  createQuiz: () => {},
   deleteQuiz: () => {},
 });
 
@@ -45,8 +41,6 @@ interface QuizProviderProps {
 export const QuizProvider = ({ children, initialData }: QuizProviderProps) => {
   const [data, setData] = useState<QuizData>(initialData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const router = useRouter();
 
   const { data: quizzes, meta } = data;
   const { page, pageCount, pageSize, total } = meta;
@@ -80,14 +74,6 @@ export const QuizProvider = ({ children, initialData }: QuizProviderProps) => {
     fetchQuizzes(page);
   };
 
-  const createQuiz = (quiz: CreateQuiz) => {
-    setIsSubmitting(true);
-    quizService
-      .createQuiz(quiz)
-      .then(() => router.push('/'))
-      .finally(() => setIsSubmitting(false));
-  };
-
   const deleteQuiz = (id: number) => {
     quizService.deleteQuiz(id).then(() => {
       //case when deleting last quiz on current page
@@ -104,11 +90,9 @@ export const QuizProvider = ({ children, initialData }: QuizProviderProps) => {
         hasPrevious,
         hasNext,
         isLoading,
-        isSubmitting,
         fetchPrevious,
         fetchNext,
         refetch,
-        createQuiz,
         deleteQuiz,
       }}
     >
