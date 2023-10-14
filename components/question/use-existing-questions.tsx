@@ -5,32 +5,36 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { useState, useEffect } from 'react';
-import { CreateQuestion } from '../../types';
 import Button from '../button';
 import { v4 as uuidv4 } from 'uuid';
+import { QuestionDTO, QuestionResponse } from '@/types/question.type';
+import { useQuizFormContext } from '@/contexts/quiz-form.context';
 
-type UseExistingQuestionsProps = {
-  handleAddQuestions: (questions: CreateQuestion[]) => void;
-  resetAction: () => void;
+type QuestionWithState = QuestionDTO & {
+  checked: boolean;
 };
 
-type QuestionWithState = CreateQuestion & { checked: boolean };
-
-export function UseExistingQuestions({
-  handleAddQuestions,
-  resetAction,
-}: UseExistingQuestionsProps) {
+export function UseExistingQuestions() {
   const [value, setValue] = useState<string>('');
   const [questions, setQuestions] = useState<QuestionWithState[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [anySelected, setAnySelected] = useState<boolean>(false);
+  const {
+    setQuestionAction,
+    questions: existingQuestions,
+    addQuestions,
+  } = useQuizFormContext();
 
+  const existingQuestionIds = existingQuestions.map((item) => item.id);
   const debounceDelay = 300;
   const debouncedSearchText = useDebounce(value, debounceDelay);
 
   useEffect(() => {
     const searchQuestions = async () => {
-      const result = await questionService.searchQuestions(debouncedSearchText);
+      const result = (
+        await questionService.searchQuestions(debouncedSearchText)
+      ).filter((item) => !existingQuestionIds.includes(item.id));
+
       setQuestions(
         result.map(
           (item): QuestionWithState => ({
@@ -73,13 +77,13 @@ export function UseExistingQuestions({
 
   const handleCancel = () => {
     resetSearch();
-    resetAction();
+    setQuestionAction(null);
   };
 
   const handleSave = () => {
-    handleAddQuestions(questions.filter((item) => item.checked));
+    addQuestions(questions.filter((item) => item.checked));
     resetSearch();
-    resetAction();
+    setQuestionAction(null);
   };
 
   return (

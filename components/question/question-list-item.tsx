@@ -1,18 +1,17 @@
+import { useQuizFormContext } from '@/contexts/quiz-form.context';
+import { QuestionDTO, QuestionResponse } from '@/types/question.type';
 import { Question } from '@prisma/client';
-import { CreateQuestion } from '../../types';
 
 export type QuestionListItemProps = {
-  question: CreateQuestion;
-  handleRemoveItem: (val: string) => void;
+  question: QuestionDTO;
+  // handleRemoveItem: (val: string) => void;
 };
 
-export default function QuestionListItem({
-  question,
-  handleRemoveItem,
-}: QuestionListItemProps) {
+export default function QuestionListItem({ question }: QuestionListItemProps) {
   const { question: name, answer, internalId } = question;
+  const { removeQuestion } = useQuizFormContext();
   const handleClick = () => {
-    handleRemoveItem(internalId);
+    removeQuestion(internalId);
   };
   return (
     <div className='relative flex items-center gap-2'>

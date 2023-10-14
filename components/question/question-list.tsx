@@ -1,27 +1,17 @@
-import { CreateQuestion } from '../../types';
 import QuestionListItem from './question-list-item';
+import { useQuizFormContext } from '@/contexts/quiz-form.context';
 
-export type QuestionListProps = {
-  questions: CreateQuestion[];
-  handleRemoveItem: (val: string) => void;
-};
+export default function QuestionList() {
+  const { questions } = useQuizFormContext();
 
-export default function QuestionList({
-  questions,
-  handleRemoveItem,
-}: QuestionListProps) {
   return (
-    <div className='py-4 flex flex-col gap-2 w-full'>
+    <div className='flex flex-col gap-2 w-full'>
       {questions.length ? (
         questions.map((question, index) => (
-          <QuestionListItem
-            key={index}
-            question={question}
-            handleRemoveItem={handleRemoveItem}
-          />
+          <QuestionListItem key={index} question={question} />
         ))
       ) : (
-        <p>No questions added.</p>
+        <p className='text-sm text-center'>No questions found.</p>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { QuizResponse } from '@/types';
+import { QuizResponse } from '@/types/meta.type';
 import { faPlay, faTrash } from '@fortawesome/free-solid-svg-icons';
 import DeleteModal from './modals/delete-modal';
 

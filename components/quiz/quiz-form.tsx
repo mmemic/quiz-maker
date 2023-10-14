@@ -1,178 +1,22 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
-import { CreateQuestion } from '../../types';
-import QuestionList from '../question/question-list';
-import AddNewQuestion from '../question/add-new-question';
-import { UseExistingQuestions } from '../question/use-existing-questions';
-import Button from '../button';
-import clsx from 'clsx';
-import { useQuizContext } from '@/contexts/quiz.context';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-enum QuestionActionEnum {
-  ADD_NEW = 'add-new',
-  USE_EXISTING = 'use-existing',
-}
+import Loading from '../loading';
+import QuizFormTitle from './form/quiz-form-title';
+import { QuestionButtons } from '../question/form/question-buttons';
+import { QuestionModule } from '../question/form/question-module';
+import { QuizFormButtons } from './form/quiz-form-buttons';
+import { useQuizFormContext } from '@/contexts/quiz-form.context';
 
 export default function QuizForm() {
-  const defaultQuizName = 'Untitled quiz';
-  const [name, setName] = useState<string>(defaultQuizName);
-  const [questions, setQuestions] = useState<CreateQuestion[]>([]);
-  const [showPen, setShowPen] = useState<boolean>(true);
-  const { createQuiz, isSubmitting } = useQuizContext();
-
-  const [questionAction, setQuestionAction] =
-    useState<QuestionActionEnum | null>(null);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
-  };
-
-  //prevent from setting empty name
-  const handleBlur = () => {
-    setShowPen(true);
-    if (!name.length) {
-      setName(defaultQuizName);
-    }
-  };
-
-  const handleAddQuestions = (questions: CreateQuestion[]) =>
-    setQuestions((prev) => [...questions, ...prev]);
-
-  const handleAction = (e: ChangeEvent<HTMLInputElement>) => {
-    setQuestionAction(e.target.value as QuestionActionEnum);
-  };
-
-  const resetAction = () => {
-    setQuestionAction(null);
-  };
-
-  const handleReset = () => {
-    setName(defaultQuizName);
-    setQuestions([]);
-  };
-
-  const handleCreate = async () => {
-    const quiz = {
-      name,
-      questions: questions.map(({ question, answer, id }) => ({
-        question,
-        answer,
-        id,
-      })),
-    };
-    createQuiz(quiz);
-  };
-
-  const handleRemoveItem = (internalId: string) => {
-    setQuestions((questions) =>
-      questions.filter((item) => item.internalId != internalId)
-    );
-  };
+  const { isSubmitting } = useQuizFormContext();
 
   return (
     <div className='form-control w-full max-w-lg flex flex-col gap-4 items-center m-4'>
-      <div className='flex items-center gap-2'>
-        <input
-          type='text'
-          className='input hover:border-primary text-center text-2xl font-semibold w-48'
-          value={name}
-          onChange={handleInputChange}
-          onBlur={handleBlur}
-          onFocus={() => setShowPen(false)}
-        />
-        <FontAwesomeIcon
-          icon={faPen}
-          className={clsx({ invisible: !showPen })}
-        />
-      </div>
-      <div className='join flex flex-col md:flex-row items-center gap-1 md:gap-0'>
-        <input
-          className='btn rounded-r-lg md:rounded-r-none'
-          type='radio'
-          aria-label='Create new question'
-          value={QuestionActionEnum.ADD_NEW}
-          checked={questionAction === QuestionActionEnum.ADD_NEW}
-          onChange={handleAction}
-        />
-        <div className='bg-accent font-semibold rounded-lg md:rounded-none p-1 md:p-3 w-fit'>
-          OR
-        </div>
-        <input
-          className='btn rounded-l-lg md:rounded-l-none'
-          type='radio'
-          aria-label='Add existing question'
-          value={QuestionActionEnum.USE_EXISTING}
-          checked={questionAction === QuestionActionEnum.USE_EXISTING}
-          onChange={handleAction}
-        />
-      </div>
-      <QuestionModule
-        action={questionAction}
-        handleAddQuestions={handleAddQuestions}
-        questions={questions}
-        resetAction={resetAction}
-        handleRemoveItem={handleRemoveItem}
-      />
-      {isSubmitting && (
-        <span className='loading loading-spinner loading-md'></span>
-      )}
-      <div
-        className={clsx(
-          {
-            'w-full flex gap-4 justify-end':
-              questions.length && !questionAction,
-          },
-          { hidden: !questions.length || questionAction }
-        )}
-      >
-        <Button className='btn btn-primary' onClick={handleReset}>
-          Reset
-        </Button>
-        <Button className='btn btn-secondary' onClick={handleCreate}>
-          Finish Quiz
-        </Button>
-      </div>
+      <QuizFormTitle />
+      <QuestionButtons className='pb-2' />
+      <QuestionModule />
+      <Loading isLoading={isSubmitting} className='-my-2' />
+      <QuizFormButtons />
     </div>
   );
-}
-type QuestionModuleProps = {
-  action: QuestionActionEnum | null;
-  handleAddQuestions: (question: CreateQuestion[]) => void;
-  questions: CreateQuestion[];
-  resetAction: () => void;
-  handleRemoveItem: (val: string) => void;
-};
-function QuestionModule({
-  action,
-  handleAddQuestions,
-  questions,
-  resetAction,
-  handleRemoveItem,
-}: QuestionModuleProps) {
-  switch (action) {
-    case QuestionActionEnum.ADD_NEW:
-      return (
-        <AddNewQuestion
-          handleAddQuestions={handleAddQuestions}
-          resetAction={resetAction}
-        />
-      );
-    case QuestionActionEnum.USE_EXISTING:
-      return (
-        <UseExistingQuestions
-          handleAddQuestions={handleAddQuestions}
-          resetAction={resetAction}
-        />
-      );
-    default:
-      return (
-        <QuestionList
-          questions={questions}
-          handleRemoveItem={handleRemoveItem}
-        />
-      );
-  }
 }

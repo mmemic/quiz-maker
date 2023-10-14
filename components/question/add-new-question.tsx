@@ -1,8 +1,9 @@
 'use client';
 import Button from '../button';
-import { CreateQuestion } from '../../types';
 import { v4 as uuidv4 } from 'uuid';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useQuizFormContext } from '@/contexts/quiz-form.context';
+import { QuestionDTO } from '@/types/question.type';
 
 type Inputs = {
   question: string;
@@ -10,14 +11,14 @@ type Inputs = {
 };
 
 export type AddNewQuestionProps = {
-  handleAddQuestions: (question: CreateQuestion[]) => void;
-  resetAction: () => void;
+  // handleAddQuestions: (question: CreateQuestion[]) => void;
+  // resetAction: () => void;
 };
 
-export default function AddNewQuestion({
-  handleAddQuestions,
-  resetAction,
-}: AddNewQuestionProps) {
+export default function AddNewQuestion({}: // handleAddQuestions,
+// resetAction,
+AddNewQuestionProps) {
+  const { setQuestionAction, addQuestions } = useQuizFormContext();
   const {
     register,
     handleSubmit,
@@ -43,17 +44,18 @@ export default function AddNewQuestion({
   };
 
   const handleCancel = () => {
-    resetAction();
+    setQuestionAction(null);
   };
 
   const onSubmit: SubmitHandler<Inputs> = ({ question, answer }) => {
-    const newQuestion: CreateQuestion = {
+    const newQuestion: QuestionDTO = {
       internalId: uuidv4(),
       question,
       answer,
     };
-    handleAddQuestions([newQuestion]);
-    resetAction();
+    addQuestions([newQuestion]);
+    setQuestionAction(null);
+    // resetAction();
   };
 
   return (

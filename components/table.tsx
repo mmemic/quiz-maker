@@ -1,5 +1,5 @@
 import TableRow from './table-row';
-import { QuizResponse } from '@/types';
+import { QuizResponse } from '@/types/meta.type';
 
 export type TableProps = {
   data: QuizResponse[];
