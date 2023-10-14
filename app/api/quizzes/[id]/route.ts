@@ -2,6 +2,7 @@ import { prisma } from '@/prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { QuizSchema } from '../../schemas';
 import { parsePathId } from '../../util';
+import { Question } from '@prisma/client';
 
 export async function GET(request: NextRequest) {
   const id = parsePathId(request.url);
@@ -41,9 +42,14 @@ export async function PUT(request: NextRequest) {
   }
 
   const { data } = response;
-  const oldQuestions = await prisma.question.findMany({
-    where: { quizId: id },
-  });
+  type NewQuestion = Pick<Question, 'question' | 'answer'>;
+  type ExistingQuestion = NewQuestion & { id: number };
+  const newQuestions: NewQuestion[] = [];
+  const existingQuestions: ExistingQuestion[] = [];
+
+  for (const q of data.questions) {
+    q.id ? existingQuestions.push(q as ExistingQuestion) : newQuestions.push(q);
+  }
 
   const updatedQuiz = await prisma.quiz.update({
     where: {
@@ -52,8 +58,8 @@ export async function PUT(request: NextRequest) {
     data: {
       name: data.name,
       questions: {
-        disconnect: oldQuestions,
-        create: data.questions,
+        connect: existingQuestions,
+        create: newQuestions,
       },
     },
     include: { questions: true },
