@@ -11,10 +11,9 @@ model Question {
   id         Int       @id @default(autoincrement())
   question   String
   answer     String
+  quizzes    Quiz[]
   created_at DateTime  @default(now()) @db.Timestamptz(3)
   updated_at DateTime? @updatedAt @db.Timestamptz(3)
-  Quiz       Quiz?     @relation(fields: [quizId], references: [id])
-  quizId     Int?
 }
 
 model Quiz {

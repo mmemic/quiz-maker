@@ -1,9 +1,16 @@
 import { PrismaClient } from '@prisma/client';
-import { seedQuestions, seedQuizzes } from './seed-data';
+import { SeedQuizDTO, seedQuizzes } from './seed-data';
 const prisma = new PrismaClient();
+
+async function createQuiz(data: SeedQuizDTO) {
+  const { questions, ...quizData } = data;
+  await prisma.quiz.create({
+    data: { ...quizData, questions: { create: questions } },
+  });
+}
+
 async function main() {
-  await prisma.quiz.createMany({ data: seedQuizzes });
-  await prisma.question.createMany({ data: seedQuestions });
+  Promise.all(seedQuizzes.map(async (item) => await createQuiz(item)));
 }
 main()
   .then(async () => {
