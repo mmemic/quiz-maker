@@ -26,6 +26,17 @@ class ApiService {
     return response.json();
   }
 
+  async put(url: string, data: unknown) {
+    const response = await fetch(`${this.baseUrl}${url}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
+    return response.json();
+  }
+
   async delete(url: string) {
     const response = await fetch(`${this.baseUrl}${url}`, {
       method: 'DELETE',
