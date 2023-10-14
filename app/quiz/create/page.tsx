@@ -1,15 +1,16 @@
 import QuizForm from '@/components/quiz/quiz-form';
-import { QuizProvider } from '@/contexts/quiz.context';
-import { quizService } from '@/services/quiz.service';
+import { QuizFormProvider } from '@/contexts/quiz-form.context';
+import { QuizFormEnum } from '@/enums/quiz-form.enum';
 
 export default async function CreateQuiz() {
-  const quizData = await quizService.getQuizzes();
-
   return (
     <main className='flex min-h-screen flex-col gap-4 items-center p-4'>
-      <QuizProvider initialData={quizData}>
+      <QuizFormProvider
+        formType={QuizFormEnum.CREATE}
+        quiz={{ name: 'Untitled quiz', questions: [] }}
+      >
         <QuizForm />
-      </QuizProvider>
+      </QuizFormProvider>
     </main>
   );
 }
