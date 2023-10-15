@@ -3,8 +3,13 @@ import { useQuizFormContext } from '@/contexts/quiz-form.context';
 import clsx from 'clsx';
 
 export function QuizFormButtons() {
-  const { questionAction, questions, handleSubmit, isQuizChanged } =
-    useQuizFormContext();
+  const {
+    questionAction,
+    questions,
+    handleSubmit,
+    isQuizChanged,
+    isSubmitting,
+  } = useQuizFormContext();
 
   return (
     <div
@@ -20,7 +25,7 @@ export function QuizFormButtons() {
       </Button>
       <Button
         className={clsx('btn btn-secondary', {
-          'btn-disabled': !isQuizChanged,
+          'btn-disabled': !isQuizChanged || isSubmitting,
         })}
         onClick={handleSubmit}
       >
