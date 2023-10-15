@@ -14,11 +14,14 @@ export default function TableRow({ data }: TableRowProps) {
   const modalId = `delete_modal_${id}`;
   return (
     <div className='w-full flex hover hover:cursor-pointer group p-3 bg-base-200 hover:bg-base-300 last:rounded-b-md'>
-      <Link href={`/quiz/edit/${slug}`} className='w-11/12 flex items-center'>
+      <Link
+        href={`/quiz/edit/${slug}`}
+        className='w-9/12 md:w-11/12 flex items-center'
+      >
         <p className='w-2/12'>{id}</p>
         <p className='w-10/12'>{name}</p>
       </Link>
-      <div className='w-1/12'>
+      <div className='w-3/12 md:w-1/12'>
         <div className='flex justify-end'>
           <button
             className='btn btn-square btn-sm btn-ghost'
