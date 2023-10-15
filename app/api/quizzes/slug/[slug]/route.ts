@@ -1,5 +1,4 @@
-import { prisma } from '@/prisma/client';
-import { quizService } from '@/services/quiz.service';
+import { quizServerService } from '@/services/server/quiz.server.service';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -10,6 +9,6 @@ export async function GET(request: NextRequest) {
       { status: 400 }
     );
 
-  const data = await quizService.getQuizBySlug(slug);
+  const data = await quizServerService.getQuizBySlug(slug);
   return NextResponse.json(data);
 }

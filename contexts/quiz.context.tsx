@@ -3,8 +3,8 @@ import { createContext, useContext } from 'react';
 import type { ReactNode } from 'react';
 import { useState } from 'react';
 import { ResponseMeta } from '@/types/meta.type';
-import { quizService } from '@/services/quiz.service';
 import { QuizResponse } from '@/types/quiz.type';
+import { quizClientService } from '@/services/client/quiz.client.service';
 
 interface QuizContextProps {
   quizzes: QuizResponse[];
@@ -50,7 +50,7 @@ export const QuizProvider = ({ children, initialData }: QuizProviderProps) => {
 
   const fetchQuizzes = (page: number) => {
     setIsLoading(true);
-    quizService
+    quizClientService
       .getQuizzes(page)
       .then((data) => {
         setData(data);
@@ -75,7 +75,7 @@ export const QuizProvider = ({ children, initialData }: QuizProviderProps) => {
   };
 
   const deleteQuiz = (id: number) => {
-    quizService.deleteQuiz(id).then(() => {
+    quizClientService.deleteQuiz(id).then(() => {
       //case when deleting last quiz on current page
       if (page != 1 && total === (page - 1) * pageSize + 1) {
         fetchQuizzes(page - 1);

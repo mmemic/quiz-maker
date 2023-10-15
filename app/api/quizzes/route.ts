@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { QuizSchema } from '../schemas';
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from '../const';
-import { quizService } from '@/services/quiz.service';
+import { quizServerService } from '@/services/server/quiz.server.service';
 
 export async function GET(request: NextRequest) {
   const pageParam = request.nextUrl.searchParams.get('page');
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   const page = pageParam ? Number.parseInt(pageParam) : DEFAULT_PAGE;
   const limit = limitParam ? Number.parseInt(limitParam) : DEFAULT_LIMIT;
 
-  const data = await quizService.getQuizzes(page, limit);
+  const data = await quizServerService.getQuizzes(page, limit);
 
   return NextResponse.json(data);
 }
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
   const { data } = response;
 
-  const quiz = await quizService.createQuiz(data);
+  const quiz = await quizServerService.createQuiz(data);
 
   return NextResponse.json(quiz);
 }

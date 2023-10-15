@@ -1,6 +1,5 @@
 'use client';
 import useDebounce from '@/hooks/use-debounce';
-import { questionService } from '@/services/question.service';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
@@ -9,6 +8,7 @@ import Button from '../button';
 import { v4 as uuidv4 } from 'uuid';
 import { QuestionDTO, QuestionResponse } from '@/types/question.type';
 import { useQuizFormContext } from '@/contexts/quiz-form.context';
+import { questionClientService } from '@/services/client/question.client.service';
 
 type QuestionWithState = QuestionDTO & {
   checked: boolean;
@@ -32,7 +32,7 @@ export function UseExistingQuestions() {
   useEffect(() => {
     const searchQuestions = async () => {
       const result = (
-        await questionService.getQuestions(debouncedSearchText)
+        await questionClientService.getQuestions(debouncedSearchText)
       ).filter((item) => !existingQuestionIds.includes(item.id));
 
       setQuestions(

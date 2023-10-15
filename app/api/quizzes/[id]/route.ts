@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parsePathId } from '../../util';
-import { quizService } from '@/services/quiz.service';
 import { QuizSchema } from '../../schemas';
+import { quizServerService } from '@/services/server/quiz.server.service';
 
 export async function GET(request: NextRequest) {
   const id = parsePathId(request.url);
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       { status: 400 }
     );
 
-  const data = await quizService.getQuiz(id);
+  const data = await quizServerService.getQuiz(id);
   return NextResponse.json(data);
 }
 
@@ -39,7 +39,7 @@ export async function PUT(request: NextRequest) {
 
   const { data } = response;
   try {
-    const updatedQuiz = await quizService.updateQuiz(id, {
+    const updatedQuiz = await quizServerService.updateQuiz(id, {
       ...data,
       id,
       slug: data.slug ?? null,
@@ -59,7 +59,7 @@ export async function DELETE(request: NextRequest) {
     );
 
   try {
-    const data = await quizService.deleteQuiz(id);
+    const data = await quizServerService.deleteQuiz(id);
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(error);

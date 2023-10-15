@@ -1,11 +1,11 @@
 import Button from '@/components/button';
 import QuizList from '@/components/quiz/quiz-list';
 import { QuizProvider } from '@/contexts/quiz.context';
-import { quizService } from '@/services/quiz.service';
+import { quizServerService } from '@/services/server/quiz.server.service';
 import Link from 'next/link';
 
 export default async function Home() {
-  const quizData = await quizService.getQuizzes();
+  const quizData = await quizServerService.getQuizzes();
 
   return (
     <main className='flex min-h-screen flex-col gap-2 items-center p-4'>

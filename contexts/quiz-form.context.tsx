@@ -6,9 +6,9 @@ import { CreateQuizDTO, UpdateQuizDTO } from '@/types/quiz.type';
 import { QuizFormEnum } from '@/enums/quiz-form.enum';
 import { QuestionActionEnum } from '@/enums/question-action.enum';
 import { QuestionDTO } from '@/types/question.type';
-import { quizService } from '@/services/quiz.service';
 import { useRouter } from 'next/navigation';
 import { useQuizContext } from './quiz.context';
+import { quizClientService } from '@/services/client/quiz.client.service';
 
 interface QuizFormContextProps {
   name: string;
@@ -78,7 +78,7 @@ export const QuizFormProvider = ({
     if (formType === QuizFormEnum.CREATE) {
       const data: CreateQuizDTO = { name, questions };
       setIsSubmitting(true);
-      quizService
+      quizClientService
         .createQuiz(data)
         .then(() => {
           refetch();
@@ -88,7 +88,7 @@ export const QuizFormProvider = ({
     } else if (formType === QuizFormEnum.EDIT) {
       const data: UpdateQuizDTO = { ...quiz, name, questions };
       setIsSubmitting(true);
-      quizService
+      quizClientService
         .updateQuiz(quiz.id, data)
         .then(() => {
           refetch();

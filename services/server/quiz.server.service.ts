@@ -111,4 +111,4 @@ class QuizService {
   }
 }
 
-export const quizService = new QuizService();
+export const quizServerService = new QuizService();

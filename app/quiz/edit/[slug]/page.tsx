@@ -1,7 +1,7 @@
 import QuizForm from '@/components/quiz/quiz-form';
 import { QuizFormProvider } from '@/contexts/quiz-form.context';
 import { QuizFormEnum } from '@/enums/quiz-form.enum';
-import { quizService } from '@/services/quiz.service';
+import { quizServerService } from '@/services/server/quiz.server.service';
 import { QuestionDTO } from '@/types/question.type';
 import { notFound } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,7 +11,7 @@ export default async function EditQuiz({
 }: {
   params: { slug: string };
 }) {
-  const data = await quizService.getQuizBySlug(params.slug);
+  const data = await quizServerService.getQuizBySlug(params.slug);
 
   if (!data) notFound();
 
