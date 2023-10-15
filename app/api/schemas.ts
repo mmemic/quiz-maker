@@ -8,5 +8,6 @@ export const QuestionSchema = z.object({
 
 export const QuizSchema = z.object({
   name: z.string(),
+  slug: z.optional(z.string()),
   questions: z.array(QuestionSchema),
 });

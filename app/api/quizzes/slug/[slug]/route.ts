@@ -1,4 +1,5 @@
 import { prisma } from '@/prisma/client';
+import { quizService } from '@/services/quiz.service';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -9,9 +10,6 @@ export async function GET(request: NextRequest) {
       { status: 400 }
     );
 
-  const data = await prisma.quiz.findFirst({
-    where: { slug },
-    include: { questions: true },
-  });
+  const data = await quizService.getQuizBySlug(slug);
   return NextResponse.json(data);
 }

@@ -1,10 +1,7 @@
-import { prisma } from '@/prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { QuizSchema } from '../schemas';
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from '../const';
-import { Question } from '@prisma/client';
-import slugify from '@sindresorhus/slugify';
-import { v4 as uuidv4 } from 'uuid';
+import { quizService } from '@/services/quiz.service';
 
 export async function GET(request: NextRequest) {
   const pageParam = request.nextUrl.searchParams.get('page');
@@ -12,19 +9,9 @@ export async function GET(request: NextRequest) {
   const page = pageParam ? Number.parseInt(pageParam) : DEFAULT_PAGE;
   const limit = limitParam ? Number.parseInt(limitParam) : DEFAULT_LIMIT;
 
-  const total = await prisma.quiz.count();
-  const pageCount = Math.ceil(total / limit);
-  const data = await prisma.quiz.findMany({
-    include: { questions: true },
-    orderBy: { updated_at: 'desc' },
-    take: limit,
-    skip: (page - 1) * limit,
-  });
+  const data = await quizService.getQuizzes(page, limit);
 
-  return NextResponse.json({
-    meta: { page, pageSize: limit, pageCount, total },
-    data,
-  });
+  return NextResponse.json(data);
 }
 
 export async function POST(request: NextRequest) {
@@ -43,33 +30,8 @@ export async function POST(request: NextRequest) {
   }
 
   const { data } = response;
-  type NewQuestion = Pick<Question, 'question' | 'answer'>;
-  type ExistingQuestion = NewQuestion & { id: number };
-  const newQuestions: NewQuestion[] = [];
-  const existingQuestions: ExistingQuestion[] = [];
 
-  for (const q of data.questions) {
-    q.id ? existingQuestions.push(q as ExistingQuestion) : newQuestions.push(q);
-  }
-
-  let slug = slugify(data.name);
-  const existingQuiz = (await prisma.quiz.findMany({ where: { slug } })).length;
-
-  if (existingQuiz) {
-    slug = `${slugify(data.name)}-${uuidv4()}`;
-  }
-
-  const quiz = await prisma.quiz.create({
-    data: {
-      name: data.name,
-      slug,
-      questions: {
-        connect: existingQuestions,
-        create: newQuestions,
-      },
-    },
-    include: { questions: true },
-  });
+  const quiz = await quizService.createQuiz(data);
 
   return NextResponse.json(quiz);
 }

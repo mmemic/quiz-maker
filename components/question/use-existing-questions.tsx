@@ -32,7 +32,7 @@ export function UseExistingQuestions() {
   useEffect(() => {
     const searchQuestions = async () => {
       const result = (
-        await questionService.searchQuestions(debouncedSearchText)
+        await questionService.getQuestions(debouncedSearchText)
       ).filter((item) => !existingQuestionIds.includes(item.id));
 
       setQuestions(
@@ -143,7 +143,7 @@ function ListItem({ question, handleSelect }: ListItemProps) {
       className={clsx('collapse bg-base-200 flex items-center', {
         'bg-secondary text-base-100': checked,
       })}
-      onClick={() => handleSelect(internalId)}
+      onClick={() => internalId && handleSelect(internalId)}
     >
       <div className='collapse-title p-4 w-11/12'>
         <p className='text-md font-medium truncate'>{name}</p>

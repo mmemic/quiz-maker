@@ -1,9 +1,12 @@
 import { Question } from '@prisma/client';
-import { apiService } from './api.service';
+import { prisma } from '@/prisma/client';
 
 class QuestionService {
-  async searchQuestions(text: string, limit = 5): Promise<Question[]> {
-    return await apiService.get(`/questions?search=${text}&limit=${limit}`);
+  async getQuestions(text?: string, limit = 5): Promise<Question[]> {
+    return await prisma.question.findMany({
+      where: { question: { contains: text, mode: 'insensitive' } },
+      take: limit,
+    });
   }
 }
 

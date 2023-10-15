@@ -1,8 +1,7 @@
-import { prisma } from '@/prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
-import { QuizSchema } from '../../schemas';
 import { parsePathId } from '../../util';
-import { Question } from '@prisma/client';
+import { quizService } from '@/services/quiz.service';
+import { QuizSchema } from '../../schemas';
 
 export async function GET(request: NextRequest) {
   const id = parsePathId(request.url);
@@ -12,10 +11,7 @@ export async function GET(request: NextRequest) {
       { status: 400 }
     );
 
-  const data = await prisma.quiz.findUnique({
-    where: { id },
-    include: { questions: true },
-  });
+  const data = await quizService.getQuiz(id);
   return NextResponse.json(data);
 }
 
@@ -42,30 +38,16 @@ export async function PUT(request: NextRequest) {
   }
 
   const { data } = response;
-  type NewQuestion = Pick<Question, 'question' | 'answer'>;
-  type ExistingQuestion = NewQuestion & { id: number };
-  const newQuestions: NewQuestion[] = [];
-  const existingQuestions: ExistingQuestion[] = [];
-
-  for (const q of data.questions) {
-    q.id ? existingQuestions.push(q as ExistingQuestion) : newQuestions.push(q);
-  }
-
-  const updatedQuiz = await prisma.quiz.update({
-    where: {
+  try {
+    const updatedQuiz = await quizService.updateQuiz(id, {
+      ...data,
       id,
-    },
-    data: {
-      name: data.name,
-      questions: {
-        connect: existingQuestions,
-        create: newQuestions,
-      },
-    },
-    include: { questions: true },
-  });
-
-  return NextResponse.json(updatedQuiz);
+      slug: data.slug ?? null,
+    });
+    return NextResponse.json(updatedQuiz);
+  } catch (error) {
+    return NextResponse.json(error);
+  }
 }
 
 export async function DELETE(request: NextRequest) {
@@ -76,6 +58,10 @@ export async function DELETE(request: NextRequest) {
       { status: 400 }
     );
 
-  const data = await prisma.quiz.delete({ where: { id } });
-  return NextResponse.json(data);
+  try {
+    const data = await quizService.deleteQuiz(id);
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json(error);
+  }
 }

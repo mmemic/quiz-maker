@@ -1,4 +1,4 @@
-import { prisma } from '@/prisma/client';
+import { questionService } from '@/services/question.service';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -6,10 +6,6 @@ export async function GET(request: NextRequest) {
   const limitParam = request.nextUrl.searchParams.get('limit');
   const limit = limitParam ? Number.parseInt(limitParam) : undefined;
 
-  const data = await prisma.question.findMany({
-    where: { question: { contains: text, mode: 'insensitive' } },
-    take: limit,
-  });
-
+  const data = await questionService.getQuestions(text, limit);
   return NextResponse.json(data);
 }

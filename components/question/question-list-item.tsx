@@ -16,7 +16,8 @@ export default function QuestionListItem({
   const { question: name, answer } = question;
   const { removeQuestion } = useQuizFormContext();
   const handleClick = () => {
-    if (enableDelete) removeQuestion(question.internalId);
+    if (enableDelete && question.internalId)
+      removeQuestion(question.internalId);
   };
   return (
     <div className='relative flex items-center gap-2'>
