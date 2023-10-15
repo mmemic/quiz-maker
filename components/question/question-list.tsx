@@ -8,7 +8,7 @@ export default function QuestionList() {
     <div className='flex flex-col gap-2 w-full'>
       {questions.length ? (
         questions.map((question, index) => (
-          <QuestionListItem key={index} question={question} />
+          <QuestionListItem key={index} question={question} enableDelete />
         ))
       ) : (
         <p className='text-sm text-center'>No questions found.</p>
