@@ -101,7 +101,10 @@ export function UseExistingQuestions() {
           setValue(e.target.value);
         }}
       />
-      <LoadingSpinner isLoading={isLoading} />
+      <LoadingSpinner
+        isLoading={isLoading}
+        className={clsx('self-center mt-4', { hidden: !isLoading })}
+      />
       <div className='py-4 flex flex-col gap-2'>
         {questions.map((question, index) => (
           <ListItem
