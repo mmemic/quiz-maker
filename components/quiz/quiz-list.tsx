@@ -9,7 +9,7 @@ export default function QuizList() {
   return (
     <>
       {quizzes.length ? (
-        <div className='w-full flex flex-col items-center gap-4'>
+        <div className='w-full flex flex-col items-center gap-4 pt-2'>
           <Table data={quizzes} />
           {isLoading && <span className='loading loading-spinner loading-md' />}
           <div className='join grid grid-cols-2'>

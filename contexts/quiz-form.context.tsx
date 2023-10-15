@@ -8,6 +8,7 @@ import { QuestionActionEnum } from '@/enums/question-action.enum';
 import { QuestionDTO } from '@/types/question.type';
 import { quizService } from '@/services/quiz.service';
 import { useRouter } from 'next/navigation';
+import { useQuizContext } from './quiz.context';
 
 interface QuizFormContextProps {
   name: string;
@@ -58,6 +59,7 @@ export const QuizFormProvider = ({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isQuizChanged, setIsQuizChanged] = useState<boolean>(false);
   const router = useRouter();
+  const { refetch } = useQuizContext();
 
   useEffect(() => {
     setIsQuizChanged(name !== quiz.name || questions !== quiz.questions);
@@ -78,14 +80,20 @@ export const QuizFormProvider = ({
       setIsSubmitting(true);
       quizService
         .createQuiz(data)
-        .then(() => router.push('/'))
+        .then(() => {
+          refetch();
+          router.push('/');
+        })
         .finally(() => setIsSubmitting(false));
     } else if (formType === QuizFormEnum.EDIT) {
       const data: UpdateQuizDTO = { ...quiz, name, questions };
       setIsSubmitting(true);
       quizService
         .updateQuiz(quiz.id, data)
-        .then(() => router.push('/'))
+        .then(() => {
+          refetch();
+          router.push('/');
+        })
         .finally(() => setIsSubmitting(false));
     }
   };
