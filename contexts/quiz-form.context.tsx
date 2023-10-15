@@ -20,6 +20,7 @@ interface QuizFormContextProps {
   questionAction: QuestionActionEnum | null;
   setQuestionAction: (val: QuestionActionEnum | null) => void;
   handleSubmit: () => void;
+  handleCancel: () => void;
   isSubmitting: boolean;
   isQuizChanged: boolean;
   resetToDefault: () => void;
@@ -35,6 +36,7 @@ const QuizFormContext = createContext<QuizFormContextProps>({
   questionAction: null,
   setQuestionAction: () => {},
   handleSubmit: () => {},
+  handleCancel: () => {},
   isSubmitting: false,
   isQuizChanged: false,
   resetToDefault: () => {},
@@ -98,6 +100,14 @@ export const QuizFormProvider = ({
     }
   };
 
+  const handleCancel = () => {
+    resetToDefault();
+    switch (formType) {
+      case QuizFormEnum.CREATE:
+        break;
+    }
+  };
+
   const resetToDefault = () => {
     setName(quiz.name);
     setQuestions(quiz.questions);
@@ -117,6 +127,7 @@ export const QuizFormProvider = ({
         questionAction,
         setQuestionAction,
         handleSubmit,
+        handleCancel,
         isSubmitting,
         isQuizChanged,
         resetToDefault,

@@ -7,6 +7,7 @@ export function QuizFormButtons() {
     questionAction,
     questions,
     handleSubmit,
+    handleCancel,
     isQuizChanged,
     isSubmitting,
   } = useQuizFormContext();
@@ -20,7 +21,10 @@ export function QuizFormButtons() {
         { hidden: !questions.length || questionAction }
       )}
     >
-      <Button className='btn btn-primary' /* onClick={handleReset} */>
+      <Button
+        className={clsx('btn btn-primary', { hidden: !isQuizChanged })}
+        onClick={handleCancel}
+      >
         Cancel
       </Button>
       <Button
