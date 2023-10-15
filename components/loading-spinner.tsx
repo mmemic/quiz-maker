@@ -4,7 +4,7 @@ type LoadingProps = {
   isLoading: boolean;
   className?: string;
 };
-export default function Loading({ isLoading, className }: LoadingProps) {
+export default function LoadingSpinner({ isLoading, className }: LoadingProps) {
   return (
     <span
       className={clsx(

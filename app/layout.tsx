@@ -6,6 +6,7 @@ import LogoIcon from '../public/logo.svg';
 const inter = Inter({ subsets: ['latin'] });
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import NextTopLoader from 'nextjs-toploader';
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang='en' data-theme='enterwell'>
       <body className={`${inter.className} relative flex flex-col pb-10`}>
+        <NextTopLoader color='#F4A261' height={4} showSpinner={true} />
         <Navbar />
         {children}
       </body>

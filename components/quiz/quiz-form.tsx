@@ -1,11 +1,11 @@
 'use client';
 
-import Loading from '../loading';
 import QuizFormTitle from './form/quiz-form-title';
 import { QuestionButtons } from '../question/form/question-buttons';
 import { QuestionModule } from '../question/form/question-module';
 import { QuizFormButtons } from './form/quiz-form-buttons';
 import { useQuizFormContext } from '@/contexts/quiz-form.context';
+import LoadingSpinner from '../loading-spinner';
 
 export default function QuizForm() {
   const { isSubmitting } = useQuizFormContext();
@@ -15,7 +15,7 @@ export default function QuizForm() {
       <QuizFormTitle />
       <QuestionButtons className='pb-2' />
       <QuestionModule />
-      <Loading isLoading={isSubmitting} className='-my-2' />
+      <LoadingSpinner isLoading={isSubmitting} className='-my-2' />
       <QuizFormButtons />
     </div>
   );

@@ -2,6 +2,7 @@
 import Table from '../table';
 import clsx from 'clsx';
 import { useQuizContext } from '@/contexts/quiz.context';
+import LoadingSpinner from '../loading-spinner';
 
 export default function QuizList() {
   const { quizzes, isLoading, hasPrevious, hasNext, fetchPrevious, fetchNext } =
@@ -11,7 +12,7 @@ export default function QuizList() {
       {quizzes.length ? (
         <div className='w-full flex flex-col items-center gap-4 pt-2'>
           <Table data={quizzes} />
-          {isLoading && <span className='loading loading-spinner loading-md' />}
+          <LoadingSpinner isLoading={isLoading} />
           <div className='join grid grid-cols-2'>
             <button
               className={clsx('join-item btn btn-outline', {

@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { QuestionDTO, QuestionResponse } from '@/types/question.type';
 import { useQuizFormContext } from '@/contexts/quiz-form.context';
 import { questionClientService } from '@/services/client/question.client.service';
+import LoadingSpinner from '../loading-spinner';
 
 type QuestionWithState = QuestionDTO & {
   checked: boolean;
@@ -100,19 +101,16 @@ export function UseExistingQuestions() {
           setValue(e.target.value);
         }}
       />
-      {isLoading ? (
-        <span className='loading loading-spinner loading-md self-center m-6 text-primary' />
-      ) : (
-        <div className='py-4 flex flex-col gap-2'>
-          {questions.map((question, index) => (
-            <ListItem
-              key={index}
-              question={question}
-              handleSelect={handleSelect}
-            />
-          ))}
-        </div>
-      )}
+      <LoadingSpinner isLoading={isLoading} />
+      <div className='py-4 flex flex-col gap-2'>
+        {questions.map((question, index) => (
+          <ListItem
+            key={index}
+            question={question}
+            handleSelect={handleSelect}
+          />
+        ))}
+      </div>
       <div className='flex gap-4 justify-end'>
         <Button className='btn btn-primary' onClick={handleCancel}>
           Cancel
