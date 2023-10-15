@@ -1,5 +1,5 @@
+import { QuizResponse } from '@/types/quiz.type';
 import TableRow from './table-row';
-import { QuizResponse } from '@/types/meta.type';
 
 export type TableProps = {
   data: QuizResponse[];
@@ -7,20 +7,16 @@ export type TableProps = {
 
 export default function Table({ data }: TableProps) {
   return (
-    <div className='w-full max-w-3xl'>
-      <table className='table'>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row) => (
-            <TableRow key={row.id} data={row} />
-          ))}
-        </tbody>
-      </table>
+    <div className='w-full max-w-3xl rounded-md'>
+      <div className='w-full flex p-3 bg-primary rounded-t-md text-base-100'>
+        <p className='w-2/12'>Id</p>
+        <p className='w-10/12'>Name</p>
+      </div>
+      <div>
+        {data.map((row) => (
+          <TableRow key={row.id} data={row} />
+        ))}
+      </div>
     </div>
   );
 }
